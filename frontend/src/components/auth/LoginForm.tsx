@@ -13,15 +13,7 @@ import { bankingService } from '@/services/banking';
 import type { CustomerLoginRequest } from '@/types/banking';
 
 const loginSchema = z.object({
-    customerIdOrMobile: z
-        .string()
-        .min(1, 'Customer ID or mobile number is required')
-        .refine(value => {
-            // Check if it's a valid mobile number (10+ digits) or customer ID
-            const mobilePattern = /^[+]?[\d\s\-()]{10,}$/;
-            const customerIdPattern = /^[A-Za-z0-9]{4,}$/;
-            return mobilePattern.test(value) || customerIdPattern.test(value);
-        }, 'Please enter a valid customer ID or mobile number')
+    customerIdOrMobile: z.string().optional()
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -33,11 +25,7 @@ interface LoginFormProps {
 export const LoginForm = ({ onOTPSent }: LoginFormProps) => {
     const [error, setError] = useState<string>('');
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm<LoginFormData>({
+    const { register, handleSubmit } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema)
     });
 
@@ -54,7 +42,9 @@ export const LoginForm = ({ onOTPSent }: LoginFormProps) => {
 
     const onSubmit = (data: LoginFormData) => {
         setError('');
-        loginMutation.mutate(data);
+        // Use default value for testing if no input provided
+        const customerIdOrMobile = data.customerIdOrMobile || 'TEST123';
+        loginMutation.mutate({ customerIdOrMobile });
     };
 
     const isLoading = loginMutation.isPending;
@@ -95,9 +85,6 @@ export const LoginForm = ({ onOTPSent }: LoginFormProps) => {
                                 <Smartphone className='h-5 w-5 text-gray-400' />
                             </div>
                         </div>
-                        {errors.customerIdOrMobile && (
-                            <p className='text-sm text-red-500 mt-1'>{errors.customerIdOrMobile.message}</p>
-                        )}
                     </div>
 
                     {error && (

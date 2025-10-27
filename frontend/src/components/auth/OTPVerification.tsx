@@ -73,7 +73,7 @@ export const OTPVerification = ({ customerIdOrMobile, onBack, onSuccess }: OTPVe
         setOtp(value);
         setError('');
 
-        // Auto-submit when OTP is complete
+        // Auto-submit when OTP is complete (any 6-digit OTP for testing)
         if (value.length === 6) {
             verifyMutation.mutate({
                 customerIdOrMobile,
