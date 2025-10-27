@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Star, ArrowRight, Home, PiggyBank, Plane, CreditCard, TrendingUp, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatCurrency } from '@/utils/formatters';
+import { emitter } from '@/agentSdk';
 import type { Product } from '@/types/banking';
 
 interface ProductCatalogueWidgetProps {
@@ -77,6 +78,26 @@ export const ProductCatalogueWidget = ({ products, recommendations = [] }: Produ
 
     const getRecommendation = (productId: string) => {
         return recommendations.find(r => r.productId === productId);
+    };
+
+    const handleProductClick = async (product: Product) => {
+        try {
+            // Trigger Information_Request event when user shows interest in a product
+            emitter.emit({
+                agentId: '3b4ec709-d050-4020-975a-11c3e24a2516',
+                event: 'Information_Request',
+                payload: {
+                    productId: product.id,
+                    productName: product.name,
+                    productCategory: product.category,
+                    userAction: 'product_click',
+                    interestRate: product.interestRate,
+                    query: `User clicked on ${product.name}. They want to learn more about this ${product.category}.`
+                }
+            });
+        } catch (error) {
+            console.error('Failed to emit product click event:', error);
+        }
     };
 
     return (
@@ -172,6 +193,7 @@ export const ProductCatalogueWidget = ({ products, recommendations = [] }: Produ
                                                     asChild
                                                     size='sm'
                                                     variant={isRecommended ? 'default' : 'outline'}
+                                                    onClick={() => handleProductClick(product)}
                                                 >
                                                     <Link to={`/products/${product.id}`}>
                                                         Learn More
