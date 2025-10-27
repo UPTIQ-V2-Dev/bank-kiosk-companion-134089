@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthPage } from '@/pages/AuthPage';
 import { DashboardPage } from '@/pages/DashboardPage';
+import { ProductDetailsPage } from '@/pages/ProductDetailsPage';
 import { Toaster } from '@/components/ui/sonner';
 
 // Create a client
@@ -42,6 +43,12 @@ export const App = () => {
                         <Route
                             path='/dashboard'
                             element={<DashboardPage />}
+                        />
+
+                        {/* Product Details */}
+                        <Route
+                            path='/products/:id'
+                            element={<ProductDetailsPage />}
                         />
 
                         {/* Catch all - redirect to auth */}
