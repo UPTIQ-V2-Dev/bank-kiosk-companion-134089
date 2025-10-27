@@ -201,14 +201,50 @@ export const mockProductRecommendations: ProductRecommendation[] = [
         customerId: '1',
         score: 95,
         reason: 'Based on your savings balance and income profile, you are eligible for our best home loan rates.',
-        priority: 1
+        priority: 1,
+        personalizedBenefits: [
+            'Save ₹2.5L in interest over loan tenure with your income bracket',
+            'Pre-approved for ₹50L based on your savings history',
+            'No processing fees due to your premium customer status'
+        ],
+        userProfile: {
+            income: 120000,
+            savings: 625000,
+            creditScore: 780,
+            age: 32,
+            occupation: 'Software Engineer'
+        },
+        specificReasons: {
+            financialGoal: 'Home ownership with optimal EMI structure',
+            riskProfile: 'Low risk with stable income',
+            currentNeed: 'Looking to upgrade from current rental property',
+            potentialSavings: 250000
+        }
     },
     {
         productId: '4',
         customerId: '1',
         score: 85,
         reason: 'Your transaction patterns show business-related expenses. A business credit card could save you money.',
-        priority: 2
+        priority: 2,
+        personalizedBenefits: [
+            'Earn ₹18,000 cashback annually based on your spending pattern',
+            'Get 45-day interest-free period for business purchases',
+            'Build business credit history separate from personal credit'
+        ],
+        userProfile: {
+            income: 120000,
+            savings: 625000,
+            creditScore: 780,
+            age: 32,
+            occupation: 'Software Engineer'
+        },
+        specificReasons: {
+            financialGoal: 'Optimize business expenses and cash flow',
+            riskProfile: 'Moderate risk with consistent business income',
+            currentNeed: 'Better management of business-related expenses',
+            potentialSavings: 18000
+        }
     }
 ];
 

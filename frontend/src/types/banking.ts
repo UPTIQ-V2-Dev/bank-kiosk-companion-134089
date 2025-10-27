@@ -73,6 +73,20 @@ export interface ProductRecommendation {
     score: number;
     reason: string;
     priority: number;
+    personalizedBenefits?: string[];
+    userProfile?: {
+        income?: number;
+        savings?: number;
+        creditScore?: number;
+        age?: number;
+        occupation?: string;
+    };
+    specificReasons?: {
+        financialGoal?: string;
+        riskProfile?: string;
+        currentNeed?: string;
+        potentialSavings?: number;
+    };
 }
 
 export interface DashboardData {

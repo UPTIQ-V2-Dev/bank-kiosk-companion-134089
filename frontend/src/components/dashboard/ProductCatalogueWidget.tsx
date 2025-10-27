@@ -6,11 +6,11 @@ import { Star, ArrowRight, Home, PiggyBank, Plane, CreditCard, TrendingUp, Award
 import { Link } from 'react-router-dom';
 import { formatCurrency } from '@/utils/formatters';
 import { emitter } from '@/agentSdk';
-import type { Product } from '@/types/banking';
+import type { Product, ProductRecommendation } from '@/types/banking';
 
 interface ProductCatalogueWidgetProps {
     products: Product[];
-    recommendations?: Array<{ productId: string; score: number; reason: string; priority: number }>;
+    recommendations?: ProductRecommendation[];
 }
 
 const getProductIcon = (category: Product['category'], iconName?: string) => {
@@ -179,10 +179,45 @@ export const ProductCatalogueWidget = ({ products, recommendations = [] }: Produ
                                                     )}
 
                                                     {isRecommended && recommendation && (
-                                                        <div className='mt-2 p-2 bg-white dark:bg-gray-800 rounded border border-gold-200 dark:border-gold-700'>
-                                                            <p className='text-xs text-gold-600 dark:text-gold-400 font-medium'>
-                                                                Why recommended: {recommendation.reason}
-                                                            </p>
+                                                        <div className='mt-3 space-y-2'>
+                                                            <div className='p-3 bg-white dark:bg-gray-800 rounded border border-gold-200 dark:border-gold-700'>
+                                                                <p className='text-xs text-gold-600 dark:text-gold-400 font-medium mb-2'>
+                                                                    Why this product is perfect for you:
+                                                                </p>
+                                                                {recommendation.personalizedBenefits &&
+                                                                recommendation.personalizedBenefits.length > 0 ? (
+                                                                    <ul className='space-y-1'>
+                                                                        {recommendation.personalizedBenefits.map(
+                                                                            (benefit: string, index: number) => (
+                                                                                <li
+                                                                                    key={index}
+                                                                                    className='text-xs text-gray-700 dark:text-gray-300 flex items-start gap-1'
+                                                                                >
+                                                                                    <span className='text-gold-500 mt-0.5'>
+                                                                                        •
+                                                                                    </span>
+                                                                                    <span>{benefit}</span>
+                                                                                </li>
+                                                                            )
+                                                                        )}
+                                                                    </ul>
+                                                                ) : (
+                                                                    <p className='text-xs text-gray-600 dark:text-gray-400'>
+                                                                        {recommendation.reason}
+                                                                    </p>
+                                                                )}
+                                                                {recommendation.specificReasons?.potentialSavings && (
+                                                                    <div className='mt-2 pt-2 border-t border-gold-100 dark:border-gold-800'>
+                                                                        <p className='text-xs font-semibold text-green-600 dark:text-green-400'>
+                                                                            💰 Potential annual savings:{' '}
+                                                                            {formatCurrency(
+                                                                                recommendation.specificReasons
+                                                                                    .potentialSavings
+                                                                            )}
+                                                                        </p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     )}
                                                 </div>
