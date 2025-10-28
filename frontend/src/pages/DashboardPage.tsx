@@ -12,6 +12,7 @@ import { useCustomerAuth } from '@/hooks/useCustomerAuth';
 import { bankingService } from '@/services/banking';
 import { AlertTriangle, Wallet, Activity, Calendar, Package } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatters';
+import { emitter } from '@/agentSdk';
 
 const LoadingSkeleton = () => (
     <div className='space-y-6'>
@@ -75,9 +76,33 @@ export const DashboardPage = () => {
 
     const { data: recommendations = [], isLoading: isRecommendationsLoading } = useQuery({
         queryKey: ['recommendations', customer?.id],
-        queryFn: () => bankingService.getProductRecommendations(customer!.id),
+        queryFn: async () => {
+            // First trigger agent recommendation request for business users
+            try {
+                await emitter.emit({
+                    agentId: '3b4ec709-d050-4020-975a-11c3e24a2516',
+                    event: 'Recommendation_Request',
+                    payload: {
+                        customerId: customer!.id,
+                        customerProfile: {
+                            accountType: customer!.accountType,
+                            occupation: 'Small and Medium Business Owner',
+                            businessType: 'SME',
+                            totalBalance: dashboardData?.totalBalance || 0,
+                            savingsBalance: dashboardData?.savingsBalance || 0
+                        },
+                        query: 'I need banking product recommendations for my small and medium business. What products would be ideal for my business operations and growth?',
+                        context: 'sme_business_recommendations'
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to emit business recommendation request:', error);
+            }
+
+            return bankingService.getProductRecommendations(customer!.id);
+        },
         retry: 2,
-        enabled: !!customer && isAuthenticated
+        enabled: !!customer && isAuthenticated && !!dashboardData
     });
 
     // Redirect to auth if not authenticated
@@ -123,9 +148,16 @@ export const DashboardPage = () => {
                             <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
                                 Welcome back, {customer.firstName}!
                             </h1>
-                            <p className='text-gray-600 dark:text-gray-400'>
+                            <p className='text-gray-600 dark:text-gray-400 mb-3'>
                                 Here's an overview of your account and available services
                             </p>
+                            <div className='bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
+                                <p className='text-blue-700 dark:text-blue-300 text-sm font-medium'>
+                                    💼 <strong>Business Banking:</strong> Discover banking products specially designed
+                                    for small and medium businesses like yours. Our AI assistant has analyzed your
+                                    profile to recommend the best products for your business growth.
+                                </p>
+                            </div>
                         </div>
 
                         {/* Account Summary Cards */}

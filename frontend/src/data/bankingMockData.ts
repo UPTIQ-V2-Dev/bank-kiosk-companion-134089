@@ -16,7 +16,7 @@ export const mockCustomer: Customer = {
     mobile: '+1234567890',
     email: 'john.smith@email.com',
     accountNumber: '1234567890123456',
-    accountType: 'Savings Plus',
+    accountType: 'Business Account Plus',
     branch: 'Downtown Main Branch',
     lastVisit: '2024-10-20T10:30:00Z',
     createdAt: '2022-01-15T00:00:00Z',
@@ -177,6 +177,43 @@ export const mockProducts: Product[] = [
         icon: 'credit-card'
     },
     {
+        id: '6',
+        name: 'SME Business Loan',
+        category: 'loan',
+        description: 'Quick business financing for small and medium enterprises',
+        features: [
+            'Competitive rates starting at 9.5%',
+            'Flexible repayment up to 7 years',
+            'Quick approval in 48 hours',
+            'Minimal documentation required'
+        ],
+        interestRate: 9.5,
+        minAmount: 50000,
+        maxAmount: 5000000,
+        tenure: '1-7 years',
+        eligibility: ['Business vintage 2+ years', 'ITR for last 2 years', 'Business turnover 10L+'],
+        isRecommended: true,
+        priority: 1,
+        icon: 'trending-up'
+    },
+    {
+        id: '7',
+        name: 'Business Current Account',
+        category: 'deposit',
+        description: 'Feature-rich current account designed for business operations',
+        features: [
+            'Free cash deposits up to 2L per month',
+            'Unlimited online transactions',
+            'Overdraft facility available',
+            'Multi-user access with role-based permissions'
+        ],
+        minAmount: 25000,
+        eligibility: ['Business registration documents', 'KYC compliance'],
+        isRecommended: true,
+        priority: 3,
+        icon: 'home'
+    },
+    {
         id: '5',
         name: 'Wealth Builder SIP',
         category: 'investment',
@@ -197,22 +234,74 @@ export const mockProducts: Product[] = [
 
 export const mockProductRecommendations: ProductRecommendation[] = [
     {
-        productId: '1',
+        productId: '6',
+        customerId: '1',
+        score: 98,
+        reason: 'As a small business owner, this SME loan can help expand your operations and improve cash flow.',
+        priority: 1,
+        personalizedBenefits: [
+            'Get up to ₹50L funding based on your business turnover',
+            'Quick 48-hour approval with minimal documentation',
+            'Flexible repayment options that align with your business cycle',
+            'No collateral required for loans up to ₹25L'
+        ],
+        userProfile: {
+            income: 200000,
+            savings: 825000,
+            creditScore: 780,
+            age: 35,
+            occupation: 'Business Owner'
+        },
+        specificReasons: {
+            financialGoal: 'Business expansion and working capital management',
+            riskProfile: 'Moderate risk with established business',
+            currentNeed: 'Access to quick funding for business opportunities',
+            potentialSavings: 0
+        }
+    },
+    {
+        productId: '7',
         customerId: '1',
         score: 95,
+        reason: 'Your business needs a dedicated current account for better financial management and operations.',
+        priority: 2,
+        personalizedBenefits: [
+            'Free cash deposits up to ₹2L per month saves ₹12,000 annually',
+            'Overdraft facility up to ₹10L for managing cash flow gaps',
+            'Multi-user access for your team members',
+            'Integrated payment gateway for online business'
+        ],
+        userProfile: {
+            income: 200000,
+            savings: 825000,
+            creditScore: 780,
+            age: 35,
+            occupation: 'Business Owner'
+        },
+        specificReasons: {
+            financialGoal: 'Streamline business banking and reduce operational costs',
+            riskProfile: 'Low risk with steady business income',
+            currentNeed: 'Separate business and personal finances effectively',
+            potentialSavings: 12000
+        }
+    },
+    {
+        productId: '1',
+        customerId: '1',
+        score: 92,
         reason: 'Based on your savings balance and income profile, you are eligible for our best home loan rates.',
-        priority: 1,
+        priority: 3,
         personalizedBenefits: [
             'Save ₹2.5L in interest over loan tenure with your income bracket',
             'Pre-approved for ₹50L based on your savings history',
             'No processing fees due to your premium customer status'
         ],
         userProfile: {
-            income: 120000,
-            savings: 625000,
+            income: 200000,
+            savings: 825000,
             creditScore: 780,
-            age: 32,
-            occupation: 'Software Engineer'
+            age: 35,
+            occupation: 'Business Owner'
         },
         specificReasons: {
             financialGoal: 'Home ownership with optimal EMI structure',
